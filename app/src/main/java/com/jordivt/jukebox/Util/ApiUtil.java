@@ -5,10 +5,10 @@ import java.util.Map;
 
 public class ApiUtil {
 
-    public static Map<String,String> getQueryMap() {
+    public static Map<String,String> getQueryMap(String id, String entity) {
         Map<String,String> map = new HashMap<>();
-        map.put("id", "909253");
-        map.put("entity", "album");
+        map.put("id", id);
+        map.put("entity", entity);
         return map;
     }
 }

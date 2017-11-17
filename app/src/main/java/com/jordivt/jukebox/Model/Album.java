@@ -2,10 +2,19 @@ package com.jordivt.jukebox.Model;
 
 public class Album {
 
+    private String wrapperType;
     private String artistName;
     private String collectionName;
     private String artworkUrl60;
     private int trackCount;
+
+    public String getWrapperType() {
+        return wrapperType;
+    }
+
+    public void setWrapperType(String wrapperType) {
+        this.wrapperType = wrapperType;
+    }
 
     public String getArtistName() {
         return artistName;

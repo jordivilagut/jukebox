@@ -14,8 +14,6 @@ import com.jordivt.jukebox.R;
 import com.jordivt.jukebox.Service.ApiService;
 import com.jordivt.jukebox.Util.ApiUtil;
 
-import java.util.Map;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,8 +44,7 @@ public class MainActivity extends Activity {
 
     private void retrieveAlbums() {
         ApiService api = JukeboxApp.get().getApiService();
-        Map<String, String> query = ApiUtil.getQueryMap(JOHNSON_ID, TYPE_ALBUM);
-        Call<AlbumsDTO> call = api.getAlbums(query);
+        Call<AlbumsDTO> call = api.getAlbums(ApiUtil.getQueryMap(JOHNSON_ID, TYPE_ALBUM));
 
         call.enqueue(new Callback<AlbumsDTO>() {
             @Override

@@ -10,7 +10,7 @@ import retrofit2.http.QueryMap;
 
 public interface ApiService {
 
-    @GET("/lookup?id=909253&entity=album")
+    @GET("/lookup")
     Call<AlbumsDTO> getAlbums(
             @QueryMap Map<String,String> params);
 }

@@ -56,16 +56,18 @@ public class MainActivity extends Activity {
                     albumsController.setAlbums(response.body().getAlbums());
                     displayAlbumsList();
                 } else {
-
+                    new android.support.v7.app.AlertDialog.Builder(getBaseContext())
+                            .setMessage(ApiUtil.parseErrorMessage(getBaseContext(), response))
+                            .setPositiveButton(R.string.ok, null)
+                            .show();
                 }
             }
 
             @Override
             public void onFailure(Call<AlbumsDTO> call, Throwable t) {
-
+                ApiUtil.displayServerError(getBaseContext());
             }
         });
-
     }
 
     private void displayAlbumsList() {

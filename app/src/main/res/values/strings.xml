@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Jukebox</string>
     <string name="tracks">%d tracks</string>
+    <string name="server_error">Server error. Try again later</string>
+    <string name="ok">Ok</string>
+
 </resources>

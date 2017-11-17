@@ -36,7 +36,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.CustomView
         Album album = albums.get(position);
         holder.artist.setText(album.getArtistName());
         holder.name.setText(album.getCollectionName());
-        holder.tracks.setText("16 tracks");
+        holder.tracks.setText(context.getString(R.string.tracks, album.getTrackCount()));
         Picasso.with(context).load(album.getArtworkUrl60()).into(holder.thumbnail);
     }
 

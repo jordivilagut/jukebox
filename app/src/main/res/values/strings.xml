@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Jukebox</string>
-    <string name="tracks">%s tracks</string>
+    <string name="tracks">%d tracks</string>
 </resources>

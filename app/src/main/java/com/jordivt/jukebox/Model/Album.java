@@ -2,11 +2,20 @@ package com.jordivt.jukebox.Model;
 
 public class Album {
 
+    private long collectionId;
     private String wrapperType;
     private String artistName;
     private String collectionName;
     private String artworkUrl60;
     private int trackCount;
+
+    public long getCollectionId() {
+        return collectionId;
+    }
+
+    public void setCollectionId(long collectionId) {
+        this.collectionId = collectionId;
+    }
 
     public String getWrapperType() {
         return wrapperType;

@@ -30,7 +30,7 @@ public class AlbumsController {
         return albumsMap.get(id);
     }
 
-    public void addTrackList(String albumId, List<Track> trackList) {
+    public void addTracklistToAlbum(String albumId, List<Track> trackList) {
         Album album = getAlbumById(albumId);
         album.setTrackList(getFilteredTrackList(trackList));
         albumsMap.put(albumId, album);

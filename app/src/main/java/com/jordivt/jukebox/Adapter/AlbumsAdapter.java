@@ -32,10 +32,12 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.CustomView
 
     private Context context;
     private List<Album> albums;
+    private AlbumsController albumsController;
 
     public AlbumsAdapter(Context context, List<Album> albums) {
         this.context = context;
         this.albums = albums;
+        this.albumsController = ControllerFactory.get().getAlbumsController();
     }
 
     @Override
@@ -55,7 +57,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.CustomView
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayTracklist(holder, String.valueOf(album.getCollectionId()));
+                retrieveTracks(holder, String.valueOf(album.getCollectionId()));
 
             }
         });
@@ -86,11 +88,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.CustomView
         }
     }
 
-    private void displayTracklist(final CustomViewHolder holder, final String albumId) {
-        int visibility = holder.tracklist.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
-        holder.tracklist.setVisibility(visibility);
-        final AlbumsController albumsController = ControllerFactory.get().getAlbumsController();
-
+    private void retrieveTracks(final CustomViewHolder holder, final String albumId) {
         if (albumsController.getAlbumById(albumId).getTrackList() == null) {
             ApiService api = JukeboxApp.get().getApiService();
             Call<TracksDTO> call = api.getTracks(ApiUtil.getQueryMap(albumId, TYPE_TRACK));
@@ -100,9 +98,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.CustomView
                 public void onResponse(Call<TracksDTO> call, Response<TracksDTO> response) {
                     if (response.isSuccessful()) {
                         List<Track> trackList = response.body().getTracks();
-                        albumsController.addTrackList(albumId, trackList);
-                        holder.tracklist.setLayoutManager( new LinearLayoutManager(context));
-                        holder.tracklist.setAdapter(new TracksAdapter(albumsController.getAlbumById(albumId).getTrackList()));
+                        albumsController.addTracklistToAlbum(albumId, trackList);
+                        displayTracklist(holder, albumId);
                     } else {
                         new android.support.v7.app.AlertDialog.Builder(context)
                                 .setMessage(ApiUtil.parseErrorMessage(context, response))
@@ -116,6 +113,15 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.CustomView
                     ApiUtil.displayServerError(context);
                 }
             });
+        } else {
+            displayTracklist(holder, albumId);
         }
+    }
+
+    private void displayTracklist(CustomViewHolder holder, String albumId) {
+        int visibility = holder.tracklist.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
+        holder.tracklist.setVisibility(visibility);
+        holder.tracklist.setLayoutManager( new LinearLayoutManager(context));
+        holder.tracklist.setAdapter(new TracksAdapter(albumsController.getAlbumById(albumId).getTrackList()));
     }
 }

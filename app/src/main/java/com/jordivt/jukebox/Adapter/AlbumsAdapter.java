@@ -52,13 +52,16 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.CustomView
         holder.artist.setText(album.getArtistName());
         holder.name.setText(album.getCollectionName());
         holder.tracks.setText(context.getString(R.string.tracks, album.getTrackCount()));
+        holder.tracklist.setVisibility(album.isExpandedView() ? View.VISIBLE : View.GONE);
         Picasso.with(context).load(album.getArtworkUrl60()).fit().into(holder.thumbnail);
+        retrieveTracks(holder.tracklist, String.valueOf(album.getCollectionId()));
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                retrieveTracks(holder, String.valueOf(album.getCollectionId()));
-
+                int visibility = album.isExpandedView()? View.GONE : View.VISIBLE;
+                holder.tracklist.setVisibility(visibility);
+                album.setExpandedView(!album.isExpandedView());
             }
         });
     }
@@ -88,7 +91,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.CustomView
         }
     }
 
-    private void retrieveTracks(final CustomViewHolder holder, final String albumId) {
+    private void retrieveTracks(final RecyclerView tracksRecyclerview, final String albumId) {
         if (albumsController.getAlbumById(albumId).getTrackList() == null) {
             ApiService api = JukeboxApp.get().getApiService();
             Call<TracksDTO> call = api.getTracks(ApiUtil.getQueryMap(albumId, TYPE_TRACK));
@@ -99,7 +102,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.CustomView
                     if (response.isSuccessful()) {
                         List<Track> trackList = response.body().getTracks();
                         albumsController.addTracklistToAlbum(albumId, trackList);
-                        displayTracklist(holder, albumId);
+                        addTracksToRecyclerview(tracksRecyclerview, albumId);
                     } else {
                         new android.support.v7.app.AlertDialog.Builder(context)
                                 .setMessage(ApiUtil.parseErrorMessage(context, response))
@@ -114,14 +117,12 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.CustomView
                 }
             });
         } else {
-            displayTracklist(holder, albumId);
+            addTracksToRecyclerview(tracksRecyclerview, albumId);
         }
     }
 
-    private void displayTracklist(CustomViewHolder holder, String albumId) {
-        int visibility = holder.tracklist.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
-        holder.tracklist.setVisibility(visibility);
-        holder.tracklist.setLayoutManager( new LinearLayoutManager(context));
-        holder.tracklist.setAdapter(new TracksAdapter(albumsController.getAlbumById(albumId).getTrackList()));
+    private void addTracksToRecyclerview(RecyclerView tracksRecyclerview, String albumId) {
+        tracksRecyclerview.setLayoutManager( new LinearLayoutManager(context));
+        tracksRecyclerview.setAdapter(new TracksAdapter(albumsController.getAlbumById(albumId).getTrackList()));
     }
 }

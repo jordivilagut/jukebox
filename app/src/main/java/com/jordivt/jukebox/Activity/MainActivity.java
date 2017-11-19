@@ -41,6 +41,7 @@ public class MainActivity extends Activity {
         recyclerView = (RecyclerView) findViewById(R.id.albums_recyclerview);
         recyclerView.setLayoutManager( new LinearLayoutManager(getBaseContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation()));
+        recyclerView.setHasFixedSize(true);
     }
 
     private void retrieveAlbums() {

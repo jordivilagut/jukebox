@@ -11,6 +11,7 @@ public class Album {
     private String artworkUrl60;
     private int trackCount;
     private List<Track> trackList;
+    private boolean expandedView;
 
     public long getCollectionId() {
         return collectionId;
@@ -66,5 +67,13 @@ public class Album {
 
     public void setTrackList(List<Track> trackList) {
         this.trackList = trackList;
+    }
+
+    public boolean isExpandedView() {
+        return expandedView;
+    }
+
+    public void setExpandedView(boolean expandedView) {
+        this.expandedView = expandedView;
     }
 }

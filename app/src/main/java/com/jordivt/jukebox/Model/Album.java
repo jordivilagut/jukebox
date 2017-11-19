@@ -1,5 +1,7 @@
 package com.jordivt.jukebox.Model;
 
+import java.util.List;
+
 public class Album {
 
     private long collectionId;
@@ -8,6 +10,7 @@ public class Album {
     private String collectionName;
     private String artworkUrl60;
     private int trackCount;
+    private List<Track> trackList;
 
     public long getCollectionId() {
         return collectionId;
@@ -55,5 +58,13 @@ public class Album {
 
     public void setTrackCount(int trackCount) {
         this.trackCount = trackCount;
+    }
+
+    public List<Track> getTrackList() {
+        return trackList;
+    }
+
+    public void setTrackList(List<Track> trackList) {
+        this.trackList = trackList;
     }
 }

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import com.jordivt.jukebox.Adapter.AlbumsAdapter;
 import com.jordivt.jukebox.Application.JukeboxApp;
 import com.jordivt.jukebox.Controller.AlbumsController;
+import com.jordivt.jukebox.Controller.ControllerFactory;
 import com.jordivt.jukebox.Model.AlbumsDTO;
 import com.jordivt.jukebox.R;
 import com.jordivt.jukebox.Service.ApiService;
@@ -30,7 +31,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        albumsController = new AlbumsController();
+        albumsController = ControllerFactory.get().getAlbumsController();
         initView();
         retrieveAlbums();
     }
@@ -38,7 +39,7 @@ public class MainActivity extends Activity {
     private void initView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
         recyclerView = (RecyclerView) findViewById(R.id.albums_recyclerview);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager( new LinearLayoutManager(getBaseContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation()));
     }
 
@@ -51,7 +52,7 @@ public class MainActivity extends Activity {
             public void onResponse(Call<AlbumsDTO> call, Response<AlbumsDTO> response) {
                 if (response.isSuccessful()) {
                     albumsController.setAlbums(response.body().getAlbums());
-                    displayAlbumsList();
+                    recyclerView.setAdapter(new AlbumsAdapter(getBaseContext(), albumsController.getAlbums()));
                 } else {
                     new android.support.v7.app.AlertDialog.Builder(getBaseContext())
                             .setMessage(ApiUtil.parseErrorMessage(getBaseContext(), response))
@@ -65,10 +66,5 @@ public class MainActivity extends Activity {
                 ApiUtil.displayServerError(getBaseContext());
             }
         });
-    }
-
-    private void displayAlbumsList() {
-        AlbumsAdapter adapter = new AlbumsAdapter(getBaseContext(), albumsController.getAlbums());
-        recyclerView.setAdapter(adapter);
     }
 }

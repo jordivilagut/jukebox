@@ -3,7 +3,7 @@ package com.jordivt.jukebox.Model;
 public class Track {
 
     private String wrapperType;
-    private String collectionName;
+    private String trackName;
     private int trackTimeMillis;
 
     public String getWrapperType() {
@@ -14,12 +14,12 @@ public class Track {
         this.wrapperType = wrapperType;
     }
 
-    public String getCollectionName() {
-        return collectionName;
+    public String getTrackName() {
+        return trackName;
     }
 
-    public void setCollectionName(String collectionName) {
-        this.collectionName = collectionName;
+    public void setTrackName(String trackName) {
+        this.trackName = trackName;
     }
 
     public int getTrackTimeMillis() {
